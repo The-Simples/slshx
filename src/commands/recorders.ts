@@ -1,6 +1,8 @@
 import type {
   APIApplicationCommand,
   APIApplicationCommandOption,
+  APIApplicationCommandSubcommandGroupOption,
+  APIApplicationCommandSubcommandOption,
   RESTPostAPIApplicationCommandsJSONBody,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   RESTPostAPIContextMenuApplicationCommandsJSONBody,
@@ -99,12 +101,13 @@ function recordChatInputCommands<Env>(
           // noinspection PointlessBooleanExpressionJS
           if (cmd.default_permission === false) defaultPermission = false;
           delete cmd.default_permission;
-          commandOptions.push({
+          commandOptions.push(<APIApplicationCommandSubcommandOption>{
             type: ApplicationCommandOptionType.SUB_COMMAND,
             ...cmd,
           });
         } else {
-          const subGroupCommandOptions: APIApplicationCommandOption[] = [];
+          const subGroupCommandOptions: APIApplicationCommandSubcommandGroupOption[] =
+            [];
           for (const [subCommandName, subCommand] of Object.entries(
             subGroupCommand
           )) {
@@ -114,8 +117,10 @@ function recordChatInputCommands<Env>(
             // noinspection PointlessBooleanExpressionJS
             if (cmd.default_permission === false) defaultPermission = false;
             delete cmd.default_permission;
-            subGroupCommandOptions.push({
-              type: ApplicationCommandOptionType.SUB_COMMAND,
+            subGroupCommandOptions.push(<
+              APIApplicationCommandSubcommandGroupOption
+            >{
+              type: ApplicationCommandOptionType.SUB_COMMAND_GROUP,
               ...cmd,
             });
           }

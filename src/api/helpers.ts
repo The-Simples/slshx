@@ -2,8 +2,10 @@ import type {
   RESTPostOAuth2ClientCredentialsResult,
   Snowflake,
 } from "discord-api-types/v9";
+import { Routes } from "discord-api-types/v9";
 import { log } from "../helpers";
 
+export { Routes };
 export interface APIBasicAuth {
   username: string;
   password: string;

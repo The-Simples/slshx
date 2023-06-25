@@ -2,6 +2,7 @@ import type {
   APIInteraction,
   APIModalSubmitInteraction,
 } from "discord-api-types/v9";
+import nacl from "tweetnacl";
 import { hexDecode } from "../helpers";
 
 const ENCODER = /* @__PURE__ */ new TextEncoder();
@@ -17,19 +18,10 @@ export async function validateInteraction(
   const timestamp = String(request.headers.get("X-Signature-Timestamp"));
   const body = await request.text();
 
-  const publicKey = await crypto.subtle.importKey(
-    "raw",
-    publicKeyData,
-    // @ts-expect-error Node.js needs to know this is a public key
-    { name: "NODE-ED25519", namedCurve: "NODE-ED25519", public: true },
-    true,
-    ["verify"]
-  );
-  const valid = await crypto.subtle.verify(
-    "NODE-ED25519",
-    publicKey,
+  const valid = nacl.sign.detached.verify(
+    ENCODER.encode(timestamp + body),
     signature,
-    ENCODER.encode(timestamp + body)
+    publicKeyData
   );
 
   return valid && JSON.parse(body);
