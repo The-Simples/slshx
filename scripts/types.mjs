@@ -41,7 +41,7 @@ const extractorCfgObject = {
     extractorMessageReporting: {
       default: { logLevel: "warning" },
       "ae-missing-release-tag": { logLevel: "none" },
-	  "ae-wrong-input-file-type": { logLevel: "none" }, // https://github.com/microsoft/rushstack/pull/4023
+      "ae-wrong-input-file-type": { logLevel: "none" }, // https://github.com/microsoft/rushstack/pull/4023
     },
   },
 };

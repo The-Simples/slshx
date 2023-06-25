@@ -1,4 +1,4 @@
-import { webcrypto } from "crypto";
+import nacl from "tweetnacl";
 import test from "ava";
 import type {
   APIInteractionResponsePong,
@@ -12,10 +12,6 @@ import {
   ignite,
   key,
 } from "./helpers";
-
-// @ts-expect-error crypto doesn't have correct WebCrypto types, so pretend
-//  it's Workers crypto.
-const crypto = webcrypto as Crypto;
 
 test("responds with PONG", async (t) => {
   const mf = ignite(t);
@@ -42,11 +38,8 @@ test("responds with 401 if signature validation fails", async (t) => {
 
   // Try with a bad signature
   const timestamp = Math.floor(Date.now() / 1000).toString();
-  const signature = await crypto.subtle.sign(
-    algorithm,
-    key.privateKey,
-    encoder.encode(timestamp + jsonBody + "😈")
-  );
+  const message = encoder.encode(timestamp + jsonBody + "😈");
+  const signature = nacl.sign.detached(message, key.privateKey);
   const signatureHex = Buffer.from(signature).toString("hex");
   res = await mf.dispatchFetch("http://localhost:8787", {
     method: "POST",

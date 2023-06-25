@@ -1,5 +1,5 @@
 {
-  "name": "slshx",
+  "name": "slshx-modified",
   "version": "0.3.0",
   "description": "Strongly-typed Discord commands on Cloudflare Workers",
   "type": "module",
@@ -16,7 +16,7 @@
     "test": "npm run build && ava",
     "lint": "eslint \"src/**/*.ts\" \"scripts/**/*.{js,mjs}\" \"types/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
-    "prepublishOnly": "npm run clean && npm run lint && npm run build && npm run build:types && npm run test"
+    "prepublishOnly": "npm run clean && npm run lint && npm run build && npm run build:types"
   },
   "repository": {
     "type": "git",
